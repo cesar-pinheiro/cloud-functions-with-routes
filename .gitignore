@@ -1,0 +1,13 @@
+# vscode
+.vscode
+
+# library
+node_modules
+
+# build
+dist
+
+# others
+.env
+tmp.js
+yarn-error.log

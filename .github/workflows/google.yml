@@ -1,0 +1,74 @@
+# Este worflow realiza o deploy dos arquivos da branch master para o Google Cloud Functions
+#
+# Referencias:
+#   - https://github.com/google-github-actions/setup-gcloud
+#   - https://cloud.google.com/sdk/gcloud/reference/alpha/functions/deploy
+#   - https://cloud.google.com/sdk/gcloud/reference/functions/deploy
+#
+
+
+name: Deploy to Google Cloud Functions
+
+on:
+  workflow_dispatch
+
+env:
+  SERVICE_NAME: "general-systems"
+  ENTRY_POINT: "sistemas"
+  GCF_REGION: "us-central1"
+
+jobs:
+  setup-build-deploy:
+    name: Setup, Build, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    # Setup NodeJS
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    
+    # Install Dependencies
+    - name: Install Dependencies
+      run: yarn install
+    
+    # Build Project
+    - name: Build Project
+      run: yarn build
+    
+    # Move to directory dist
+    - name: Move to Directory dist
+      run: cd dist
+      
+    # Copy package.json to dist folder
+    - name: Copy package.json to dist folder
+      run: cp package.json ./dist/package.json
+       
+    # Setup GCloud CLI
+    - name: Connect to Google Cloud CLI
+      uses: google-github-actions/setup-gcloud@master 
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        
+    # Push to Google Cloud Functios
+    - name: Push to Google Cloud Functions
+      run: |
+        gcloud functions deploy "$SERVICE_NAME" \
+        --no-user-output-enabled \
+        --source ./dist \
+#        --runtime nodejs10 \
+#        --trigger-http \
+#        --allow-unauthenticated \
+#        --entry-point "$ENTRY_POINT" \
+#        --region "$REGION" \
+#        --set-env-vars \
+#          "MONGO_HOST=${{ secrets.MONGO_HOST }},MONGO_PORT=${{ secrets.MONGO_PORT }},MONGO_USER=${{ secrets.MONGO_USER }},MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }},MONGO_DATABASE=${{ secrets.MONGO_DATABASE }},MONGO_SSL=${{ secrets.MONGO_SSL }},MONGO_AUTHSOURC=${{ secrets.MONGO_AUTHSOURCE }},MONGO_REPLICASE=${{ secrets.MONGO_REPLICASET }}"
+          
+# Notas:
+# Descomentar as linhas de argumentos acima somente quando primeira implantação ou reimplantação da Function.
+# Neste caso, após a implantação da Function, acessar a mesma através do GCP e definir os valores das variáveis de ambiente.
