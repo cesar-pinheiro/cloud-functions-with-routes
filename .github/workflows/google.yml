@@ -61,7 +61,7 @@ jobs:
         gcloud functions deploy "$SERVICE_NAME" \
         --no-user-output-enabled \
         --source ./dist \
-#        --runtime nodejs10 \
+#        --runtime nodejs12 \
 #        --trigger-http \
 #        --allow-unauthenticated \
 #        --entry-point "$ENTRY_POINT" \
