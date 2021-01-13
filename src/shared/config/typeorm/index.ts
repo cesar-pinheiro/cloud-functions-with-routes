@@ -10,17 +10,15 @@ const database: string = process.env.MONGO_DATABASE || ''
 const ssl: boolean = process.env.MONGO_SSL?.toLowerCase() === 'true'
 const authMechanism: string = user ? 'SCRAM-SHA-1' : ''
 
-createConnections([
-  {
-    name: "mongo-sistema",
-    type: "mongodb",
-    url: `mongodb://${user ? user + ":" + password + "@" : ''}${host}:${port}/${database}`,
-    ssl,
-    authMechanism,
-    useUnifiedTopology: true,
-    entities: [`${dev ? "./src" : "."}/**/modules/**/schemas/*.${dev ? "ts" : "js"}`]
-  }
-])
-  .then(() => console.log('Typeorm successfully initialized'))
-  .catch(err => console.log(`Failed initialization on typeorm: ${err}`))
-  
+export default createConnections([
+    {
+        name: "mongo-sistema",
+        type: "mongodb",
+        url: `mongodb://${user ? user + ":" + password + "@" : ''}${host}:${port}/${database}`,
+        ssl,
+        authMechanism,
+        useUnifiedTopology: true,
+        entities: [`${dev ? "./src" : "."}/**/modules/**/schemas/*.${dev ? "ts" : "js"}`],
+        synchronize: true
+    }
+]).then(() => console.log('Typeorm successfully initialized'));
