@@ -1,6 +1,5 @@
 import VersoesRepository from '../repositories/VersoesRepository'
 import IVersaoDTO from '../dtos/IVersaoDTO'
-//import ICreateVersaoDTO from '../dtos/ICreateVersaoDTO'
 
 let versoesRepository: VersoesRepository
 

@@ -11,20 +11,21 @@ interface IAplicacao {
 
 @Entity('versoes')
 class Versao implements IVersaoDTO {
-  @ObjectIdColumn()
-  id: ObjectID
+
+  @ObjectIdColumn({ name: '_id' })
+  readonly id: ObjectID
 
   @Column()
-  aplicacao: IAplicacao
+  public aplicacao: IAplicacao
 
   @Column()
-  versao: IVersao
+  public versao: IVersao
   
   @Column()
-  descricao: string
+  public descricao: string
 
   @CreateDateColumn()
-  data_criacao: Date
+  public data_criacao: Date
 
   @BeforeInsert()
   private async toObjectId() {

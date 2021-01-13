@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import AppError from '../../../shared/errors/AppError'
 import ShowLastVersaoAplicacaoService from '../services/ShowLastVersaoAplicacaoService'
 
-export default class VersoesController {
+export default class LastVersaoAplicacaoController {
     public async show(request: Request, response: Response): Promise<Response> {
         const { aplicacao_id } = request.params;
 
