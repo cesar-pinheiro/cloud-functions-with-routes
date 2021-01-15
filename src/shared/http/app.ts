@@ -27,8 +27,8 @@ Sentry.init({
 /* Valida a conexão com o banco de dados
    Importante que este seja executado antes da definição das rotas */
 app.use(
-    (err: Error, request: Request, response: Response, next: NextFunction) => {
-            createConnections.catch(err => {
+    async (err: Error, request: Request, response: Response, next: NextFunction) => {
+            await createConnections.catch(err => {
                 console.log(`Failed initialization on typeorm: ${err}`)
                 response.status(500).json({
                     status: 'error',
